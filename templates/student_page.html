@@ -1,0 +1,62 @@
+{% extends 'base_page.html' %}
+
+{% block container %}
+    <table cellpadding="20">
+    <tr>
+        <th><a id="addID" href="/add_student/"><i class="fas fa-user-plus"></i>&nbsp;Add</a></th>
+        <th><a id="edtID" href="#"><i class="fas fa-user-edit"></i>&nbsp;Edit</a></th>
+        <th><a id="delID" href="#"><i class="fas fa-user-minus"></i>&nbsp;Delete</a></th>
+        <th><a id="grdID" href="#"><i class="fas fa-graduation-cap"></i>&nbsp;Grade Assignments</a></th>
+    </tr>
+    </table>
+    <form id="StudentForm" method="POST">
+        <table class="table table-hover">
+        <thead class="thead-light">
+        <tr>
+            <th>&nbsp;</th>
+            <th>ID</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Email</th>
+            <th>Major</th>
+            <th>Grade</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td align=center><input type="radio" id="{{ student.studentid }}" name="StudentID" value="{{ student.studentid }}"></td>
+                <td>{{ student.studentid }}</td>
+                <td>{{ student.firstname }}</td>
+                <td>{{ student.lastname }}</td>
+                <td>{{ student.email }}</td>
+                <td>{{ student.major }}</td>
+                <td>&nbsp;</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </form>
+<script type="text/javascript">
+    $(document).ready(function() {
+      $('#edtID').click(function() {
+        event.preventDefault()
+        $('#StudentForm').attr('method', 'POST');
+        $('#StudentForm').attr('action', '/edit_student/');
+        $('#StudentForm').submit();
+      });
+      $('#delID').click(function() {
+        event.preventDefault()
+        $('#StudentForm').attr('method', 'POST');
+        $('#StudentForm').attr('action', '/delete_student/');
+        $('#StudentForm').submit();
+      });
+      $('#grdID').click(function() {
+        event.preventDefault()
+        $('#StudentForm').attr('method', 'POST');
+        $('#StudentForm').attr('action', '/grade_student/');
+        $('#StudentForm').submit();
+      });
+    });
+</script>
+{% endblock %}

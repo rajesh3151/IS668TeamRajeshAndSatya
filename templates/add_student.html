@@ -1,0 +1,45 @@
+
+{% extends 'base_page.html' %}
+
+{% block container %}
+
+
+<div class="container">
+    {% if student is defined %}
+        <h2>Edit Student Id : {{ student.studentid }}</h2>
+    {% else %}
+        <h2>Add Student</h2>
+    {% endif %}
+
+  <form action="{{ url_for('add_student') }}" method = "post" class="was-validated">
+    {% if student is defined %}
+        <input type=hidden name="StudentID"  value="{{ student.studentid }}">
+    {% endif %}
+    <div class="form-group">
+      <label for="fname">Firstname:</label>
+      <input type="text" class="form-control" id="fname" placeholder="Enter firstname" name="fname" required {% if student is defined %} value="{{ student.firstname }}" {% endif %}>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="form-group">
+      <label for="lname">LastName:</label>
+      <input type="text" class="form-control" id="lname" placeholder="Enter lastname" name="lname" required {% if student is defined %} value="{{ student.lastname }}" {% endif %}>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="form-group">
+      <label for="email">email:</label>
+      <input type="text" class="form-control" id="email" placeholder="Enter emal" name="email" required {% if student is defined %} value="{{ student.email }}" {% endif %}>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="form-group">
+      <label for="major">Major:</label>
+      <input type="text" class="form-control" id="major" placeholder="Enter major" name="major" required {% if student is defined %} value="{{ student.major }}" {% endif %}>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+{% endblock %}

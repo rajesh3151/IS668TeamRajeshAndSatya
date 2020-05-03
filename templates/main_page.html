@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <title>My scratchboard page</title>
+    </head>
+
+    <body>
+         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <div class="container">
+                <div class="navbar-header">
+                       <a class="navbar-brand" href="#">My scratchpad:  Name: Rajesh Selvam</a>
+                       <a class="navbar-brand justify-content-center" href="#">Date: {{ timestamp.strftime("%A, %d %B %Y at %H:%M") }} </a>
+                       <a class="navbar-brand justify-content-Right" href="#">Class: IS 668 Enterprise-Wide Computing </a>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                        <li><a>Log in</a></li>
+                </ul>
+            </div>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('logout') }}">Log out</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('login') }}">Log in</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+
+<div class="container">
+
+        {% for comment in comments %}
+           <div class="row" style="margin-bottom: 1ex">
+                <div>
+                    {{ comment.content }}
+                    <br>
+                    <small>
+                        Posted
+                        {% if comment.posted %}
+                            {{ comment.posted.strftime("%A, %d %B %Y at %H:%M") }}
+                        {% else %}
+                            at an unknown time
+                        {% endif %}
+                        by
+                        {# below expressions to output the username based on condition #}
+                        {% if comment.commenter %}
+                            {{ comment.commenter.username }}
+                        {% else %}
+                            anonymous
+                        {% endif %}
+                        User ID:
+                        {% if comment.commenter %}
+                            {{ comment.commenter.id  }}
+                        {% else %}
+                            anonymous
+                        {% endif %}
+
+                    </small>
+                </div>
+                <hr>
+            </div>
+        {% endfor %}
+
+        {% if current_user.is_authenticated %}
+            <div class="row">
+                <form action="." method="POST">
+                    <textarea name="contents" placeholder="Enter a comment" class="form-control"></textarea>
+                <input type="submit" class="btn btn-success" value="Post comment">
+        </form>
+    </div>
+        {% endif %}
+</div><!-- /.container -->
+    </body>
+</html>

@@ -1,0 +1,52 @@
+{% extends 'base_page.html' %}
+
+{% block container %}
+
+    <form id="GradeForm" method="POST" action="/grade_student/">
+
+        <table cellpadding="20">
+        <tr>
+            <th>Assign grades for student {{ student.firstname }} {{ student.lastname }} - ID : {{ student.studentid }}</th>
+        </tr>
+        </table>
+
+        <table class="table table-hover">
+        <thead class="thead-light">
+        <tr>
+            <th>Title</th>
+            <th>Assigned Date</th>
+            <th>Due Date</th>
+            <th>Date Submitted</th>
+            <th class="text-right">Max Score</th>
+            <th>Score</th>
+            <th>Comments</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for assignment in assignments %}
+                {% set gradebook = "" %}
+                {%  for gradebook1 in gradebook if gradebook.assignmentid == assignment.assignmentid %}
+                    set gradebook = gradebook1
+                {%  endfor %}
+            <tr>
+                <input type="hidden" id="assignmentid" name="AssignmentID" value="{{ assignment.assignmentid }}">
+                <td>{{ assignment.assignmenttitle }}</td>
+                <td>{{ assignment.dateassigned.strftime('%d %b %Y') }}</td>
+                <td>{{ assignment.duedate.strftime('%d %b %Y') }}</td>
+                <td><input type="date" id="submiton" name="submiton" value="{{ gradebook.submiton }}"></td>
+                <td class="text-right">{{ assignment.maxscore }}</td>
+                <td><input type="number" id="actscore" name="actscore" value="{{ gradebook.assignmentgrade }}" min="0" max="{{ assignment.maxscore }}" step="0.01" class="text-right"></td>
+                <td><input type="text" id="comments" name="comments" value="{{ gradebook.comments }}"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <th colspan=7><button type="submit" class="btn btn-secondary"><i class="fas fa-graduation-cap"></i>&nbsp;Submit Grades</button></th>
+        </tr>
+        </tfoot>
+        </table>
+
+    </form>
+
+{% endblock %}

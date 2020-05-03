@@ -1,0 +1,51 @@
+
+{% extends 'base_page.html' %}
+
+{% block container %}
+
+
+<div class="container">
+    {% if assignment is defined %}
+        <h2>Edit Assignment Id : {{ assignment.assignmentid }}</h2>
+    {% else %}
+        <h2>Add Assignment</h2>
+    {% endif %}
+
+  <form action="{{ url_for('add_assignment') }}" method = "post" class="was-validated">
+    {% if assignment is defined %}
+        <input type=hidden name="AssignmentID"  value="{{ assignment.assignmentid }}">
+    {% endif %}
+    <div class="form-group">
+      <label for="title">Title:</label>
+      <input type="text" class="form-control" id="title" placeholder="Enter Title" name="title" required {% if assignment is defined %} value="{{ assignment.assignmenttitle }}" {% endif %}>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="form-group">
+      <label for="assign_date">Date Assigned:</label>
+      <input type="date" class="form-control" id="assigndate" placeholder="Enter Date Assigned" name="assigndate" required {% if assignment is defined %} value="{{ assignment.dateassigned }}" {% endif %}>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="form-group">
+      <label for="duedate">Due Date:</label>
+      <input type="date" class="form-control" id="duedate" placeholder="Enter Due Date" name="duedate" required {% if assignment is defined %} value="{{ assignment.duedate }}" {% endif %}>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="form-group">
+      <label for="maxscore">Max Score:</label>
+      <input type="text" class="form-control" id="maxscore" placeholder="Enter Maximum Score" name="maxscore" required {% if assignment is defined %} value="{{ assignment.maxscore }}" {% endif %}>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="form-group">
+      <label for="comments">Comments:</label>
+      <input type="text" class="form-control" id="comments" placeholder="Enter Comments" name="comments" required {% if assignment is defined %} value="{{ assignment.comments }}" {% endif %}>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+{% endblock %}

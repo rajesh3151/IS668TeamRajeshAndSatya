@@ -1,0 +1,56 @@
+{% extends 'base_page.html' %}
+
+{% block container %}
+    <table cellpadding="20">
+    <tr>
+        <th><a id="addID" href="/add_assignment/"><i class="fas fa-book"></i>&nbsp;Add</a></th>
+        <th><a id="edtID" href="#"><i class="fas fa-book"></i>&nbsp;Edit</a></th>
+        <th><a id="delID" href="#"><i class="fas fa-book"></i>&nbsp;Delete</a></th>
+        <th><a id="grdID" href="#"><i class="fas fa-graduation-cap"></i>&nbsp;Grade Students</a></th>
+    </tr>
+    </table>
+    <form id="AssignmentForm" method="POST">
+        <table class="table table-hover">
+        <thead class="thead-light">
+        <tr>
+            <th>&nbsp;</th>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Assigned Date</th>
+            <th>Due Date</th>
+            <th>Max Score</th>
+            <th>Comments</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for assignment in assignments %}
+            <tr>
+                <td align=center><input type="radio" id="{{ assignment.assignmentid }}" name="AssignmentID" value="{{ assignment.assignmentid }}"></td>
+                <td>{{ assignment.assignmentid }}</td>
+                <td>{{ assignment.assignmenttitle }}</td>
+                <td>{{ assignment.dateassigned.strftime('%d %b %Y') }}</td>
+                <td>{{ assignment.duedate.strftime('%d %b %Y') }}</td>
+                <td>{{ assignment.maxscore }}</td>
+                <td>{{ assignment.comments }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </form>
+<script type="text/javascript">
+    $(document).ready(function() {
+      $('#edtID').click(function() {
+        event.preventDefault()
+        $('#AssignmentForm').attr('method', 'POST');
+        $('#AssignmentForm').attr('action', '/edit_assignment/');
+        $('#AssignmentForm').submit();
+      });
+      $('#delID').click(function() {
+        event.preventDefault()
+        $('#AssignmentForm').attr('method', 'POST');
+        $('#AssignmentForm').attr('action', '/delete_assignment/');
+        $('#AssignmentForm').submit();
+      });
+    });
+</script>
+{% endblock %}
