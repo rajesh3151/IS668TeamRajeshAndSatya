@@ -5,11 +5,13 @@
 
 
 <div class="container">
-    {% if assignment is defined %}
-        <h2>Edit Assignment Id : {{ assignment.assignmentid }}</h2>
-    {% else %}
-        <h2>Add Assignment</h2>
-    {% endif %}
+    <div class="pb-2 mt-4 mb-2 border-bottom">
+        {% if assignment is defined %}
+            <h4>Edit Assignment Id : {{ assignment.assignmentid }}</h4>
+        {% else %}
+            <h4>Add Assignment</h4>
+        {% endif %}
+    </div>
 
   <form action="{{ url_for('add_assignment') }}" method = "post" class="was-validated">
     {% if assignment is defined %}
@@ -20,6 +22,10 @@
       <input type="text" class="form-control" id="title" placeholder="Enter Title" name="title" required {% if assignment is defined %} value="{{ assignment.assignmenttitle }}" {% endif %}>
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="form-group">
+      <label for="classid">Class</label>
+      <select id="classid" class="form-control" name="classid"><option value="IS668">IS668 - Enterprise-Wide Computing</option></select>
     </div>
     <div class="form-group">
       <label for="assign_date">Date Assigned:</label>
@@ -45,7 +51,7 @@
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-secondary">Submit</button>
   </form>
 </div>
 {% endblock %}

@@ -2,51 +2,64 @@
 
 {% block container %}
 
-    <form id="GradeForm" method="POST" action="/grade_student/">
+    <form id="GradeForm" method="POST" action="/update_grades/">
+        <input type=hidden name="GradeBook" value='STUDENTS'>
 
-        <table cellpadding="20">
-        <tr>
-            <th>Assign grades for student {{ student.firstname }} {{ student.lastname }} - ID : {{ student.studentid }}</th>
-        </tr>
-        </table>
+        <div class="border-bottom row">
+            <table style="width: 100%">
+                <tr>
+                    <th style="width: 9%">Student Name </th><th style="width: 1%">:</th><th style="width: 20%"> {{ student.firstname }} {{ student.lastname }}</th>
+                    <th style="width: 9%">&nbsp;</th><th style="width: 1%">&nbsp;</th><th style="width: 13%">&nbsp;</th>
+                    <th style="width: 25%">
+                        Class : &nbsp; <select id="classid" name="classid"><option value="IS668">IS668 - Enterprise-Wide Computing</option></select>
+                    </th>
+                    <th>&nbsp;</th>
+                    <th class="text-right" style="width: 20%"><input class="form-control" id="SearchBox" type="text" placeholder="Search.."></th>
+                </tr>
+                <tr><th>E-Mail Address</th><th>:</th><th>{{ student.email }}</th><th>Major</th><th>:</th><th>{{ student.major }}</th></tr>
+                <tr><th>Total Score</th><th>:</th><th>{{ finalscore }} / {{ assignments | sum(attribute='maxscore') }}</th><th>Grade</th><th>:</th><th>{{ finalGrade }}</th></tr>
+            </table>
+        </div>
+        <br>
 
-        <table class="table table-hover">
+        <table class="table table-hover" data-toggle="table">
         <thead class="thead-light">
         <tr>
-            <th>Title</th>
-            <th>Assigned Date</th>
-            <th>Due Date</th>
-            <th>Date Submitted</th>
-            <th class="text-right">Max Score</th>
-            <th>Score</th>
+            <th>&nbsp;</th>
+            <th data-sortable="true">Title</th>
+            <th data-sortable="true" class="text-center">Assigned Date</th>
+            <th data-sortable="true" class="text-center">Due Date</th>
+            <th class="text-right" data-sortable="true">Max Score</th>
+            <th data-sortable="true" class="text-center">Date Submitted</th>
+            <th data-sortable="true" class="text-right">Score</th>
             <th>Comments</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="DataTable">
             {% for assignment in assignments %}
-                {% set gradebook = "" %}
-                {%  for gradebook1 in gradebook if gradebook.assignmentid == assignment.assignmentid %}
-                    set gradebook = gradebook1
-                {%  endfor %}
             <tr>
-                <input type="hidden" id="assignmentid" name="AssignmentID" value="{{ assignment.assignmentid }}">
+                <td align=center><input type="radio" id="{{ assignment.assignmentid }}_{{ student.studentid }}" name="GradeID" value="{{ assignment.assignmentid }}_{{ student.studentid }}"></td>
                 <td>{{ assignment.assignmenttitle }}</td>
-                <td>{{ assignment.dateassigned.strftime('%d %b %Y') }}</td>
-                <td>{{ assignment.duedate.strftime('%d %b %Y') }}</td>
-                <td><input type="date" id="submiton" name="submiton" value="{{ gradebook.submiton }}"></td>
+                <td class="text-center">{{ assignment.dateassigned.strftime('%d %b %Y') }}</td>
+                <td class="text-center">{{ assignment.duedate.strftime('%d %b %Y') }}</td>
                 <td class="text-right">{{ assignment.maxscore }}</td>
-                <td><input type="number" id="actscore" name="actscore" value="{{ gradebook.assignmentgrade }}" min="0" max="{{ assignment.maxscore }}" step="0.01" class="text-right"></td>
-                <td><input type="text" id="comments" name="comments" value="{{ gradebook.comments }}"></td>
+                {% for gradebook in gradebooks %}
+                    {% if gradebook.assignmentid == assignment.assignmentid %}
+                        <td class="text-center">{{ gradebook.submiton.strftime('%d %b %Y') }}</td>
+                        <td class="text-right">{{ gradebook.assignmentgrade }}</td>
+                        <td>{{ gradebook.comments }}</td>
+                    {% endif %}
+                {% endfor %}
             </tr>
             {% endfor %}
-        </tbody>
-        <tfoot>
-        <tr>
-            <th colspan=7><button type="submit" class="btn btn-secondary"><i class="fas fa-graduation-cap"></i>&nbsp;Submit Grades</button></th>
-        </tr>
-        </tfoot>
-        </table>
 
+        </tbody>
+        </table>
+        <table cellpadding="20">
+        <tr>
+            <th><button type="submit"  class="btn btn-secondary"><i class="fas fa-graduation-cap"></i>&nbsp;Update Grade</button></th>
+        </tr>
+        </table>
     </form>
 
 {% endblock %}
