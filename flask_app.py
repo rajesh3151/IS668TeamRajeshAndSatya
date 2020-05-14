@@ -341,38 +341,5 @@ def gradebook():
     gradebook = Gradebook.query.all()
     return render_template('gradebook_page.html', students=students, assignments=assignments, user=user, gradebook=gradebook)
 
-@app.route("/", methods=["GET", "POST"])
-@login_required
-def index():
-
-    if request.method == "GET":
-       #return render_template("main_page.html", comments=Comment.query.all(), timestamp=datetime.now())
-       return render_template("gradebook_page.html")
-
-    if not current_user.is_authenticated:
-        return redirect(url_for('index'))
-
-    #comment = Comment(content=request.form["contents"], commenter=current_user )
-    #db.session.add(comment)
-    #db.session.commit()
-
-    return redirect(url_for('index'))
-
-
-@app.route("/login_old", methods=["GET", "POST"])
-@login_required
-def login_old():
-    if request.method == "GET":
-        return render_template("login_page.html", timestamp=datetime.now(), error=False)
-
-    user = load_user(request.form["username"])
-    if user is None:
-        return render_template("login_page.html", timestamp=datetime.now(), error=True)
-
-    if not user.check_password(request.form["password"]):
-        return render_template("login_page.html", timestamp=datetime.now(), error=True)
-
-    login_user(user)
-    return redirect(url_for('index'))
 
 

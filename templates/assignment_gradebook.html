@@ -61,4 +61,13 @@
         </table>
     </form>
 
+    <script>
+    $("#GradeForm").submit(function()
+    {
+        if (!$("input[name=GradeID]:checked").val())
+        {
+            return false;
+        }
+    });
+    </script>
 {% endblock %}
