@@ -1,0 +1,34 @@
+
+{% extends 'base_page.html' %}
+
+{% block container %}
+
+
+<div class="container">
+    <form action="{{ url_for('add_class') }}" method = "post" class="was-validated">
+    <div class="pb-2 mt-4 mb-2 border-bottom">
+        {% if classes is defined %}
+            <h4>Edit Class Id : {{ classes.classid }}</h4>
+            <input type=hidden name="classaction"  value="EDIT">
+        {% else %}
+            <h4>Add Class</h4>
+            <input type=hidden name="classaction"  value="ADD">
+        {% endif %}
+    </div>
+    <div class="form-group">
+      <label for="classid">Class ID</label>
+      <input type="text" class="form-control" id="classid" placeholder="Enter Class ID" name="classid" required {% if classes is defined %} readonly value="{{ classes.classid }}" {% endif %}>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="form-group">
+      <label for="classname">Name</label>
+      <input type="text" class="form-control" id="classname" placeholder="Enter Name" name="classname" required {% if classes is defined %} value="{{ classes.name }}" {% endif %}>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <button type="submit" class="btn btn-secondary">Submit</button>
+    <a href="http://is668grade.pythonanywhere.com/classes" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

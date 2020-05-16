@@ -18,10 +18,6 @@
         <input type=hidden name="StudentID"  value="{{ student.studentid }}">
     {% endif %}
     <div class="form-group">
-      <label for="classid">Class</label>
-      <select id="classid" class="form-control" name="classid"><option value="IS668">IS668 - Enterprise-Wide Computing</option></select>
-    </div>
-    <div class="form-group">
       <label for="fname">First Name</label>
       <input type="text" class="form-control" id="fname" placeholder="Enter firstname" name="fname" required {% if student is defined %} value="{{ student.firstname }}" {% endif %}>
       <div class="valid-feedback">Valid.</div>
@@ -45,7 +41,8 @@
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
     </div>
-    <button type="submit" class="btn btn-secondary">Submit</button>
+    <button type="submit" class="btn btn-secondary">Save Student</button>
+    <a href="http://is668grade.pythonanywhere.com/students" class="btn btn-secondary">Cancel</a>
   </form>
 </div>
 {% endblock %}

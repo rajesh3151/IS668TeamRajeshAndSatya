@@ -5,27 +5,19 @@
     <form id="GradeForm" method="POST" action="/update_grades/">
         <input type=hidden name="GradeBook" value='ASSIGNMENTS'>
 
+        <input type=hidden name="classid" value='{{ classes.classid }}'>
+
         <div class="border-bottom row">
             <table style="width: 100%">
                 <tr>
                     <th style="width: 53%">Grades for Assignment : {{ assignment.assignmenttitle }}</th>
-                    <th style="width: 25%">Class : IS668 - Enterprise-Wide Computing</th>
+                    <th style="width: 25%">Class : {{ classes.name }}</th>
                     <th>&nbsp;</th>
                     <th class="text-right" style="width: 20%"><input class="form-control" id="SearchBox" type="text" placeholder="Search.."></th>
                 </tr>
             </table>
         </div>
         <br>
-
-<!--        <div class="pb-2 mt-4 mb-2 border-bottom row">
-            <table width=100%>
-                <tr>
-                    <td><h4>Grades for Assignment : {{ assignment.assignmenttitle }}</h4></td>
-                    <td align=right><input class="form-control" id="SearchBox" type="text" placeholder="Search.."></td>
-                </tr>
-            </table>
-        </div>
--->
         <table class="table table-hover" data-toggle="table">
         <thead class="thead-light">
         <tr>
@@ -56,7 +48,8 @@
         </table>
         <table cellpadding="20">
         <tr>
-            <th><button type="submit" class="btn btn-secondary"><i class="fas fa-graduation-cap"></i>&nbsp;Update Grade</button></th>
+            <td><button type="submit"  class="btn btn-secondary"><i class="fas fa-graduation-cap"></i>&nbsp;Update Grade</button></td>
+            <td><a href="http://is668grade.pythonanywhere.com/assignments" class="btn btn-secondary">Cancel</td></a>
         </tr>
         </table>
     </form>

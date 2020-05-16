@@ -4,14 +4,20 @@
 
     <form name="GradeForm" id="GradeForm" method="POST" action="/update_grades/">
         <input type=hidden name="GradeBook" value='STUDENTS'>
+        <input type=hidden name="StudentID" value='{{ student.studentid }}'>
+        <input type=hidden name="formsubmit">
 
         <div class="border-bottom row">
             <table style="width: 100%">
                 <tr>
                     <th style="width: 9%">Student Name </th><th style="width: 1%">:</th><th style="width: 20%"> {{ student.firstname }} {{ student.lastname }}</th>
                     <th style="width: 9%">&nbsp;</th><th style="width: 1%">&nbsp;</th><th style="width: 13%">&nbsp;</th>
-                    <th style="width: 25%">
-                        Class : &nbsp; <select id="classid" name="classid"><option value="IS668">IS668 - Enterprise-Wide Computing</option></select>
+                    <th style="width: 25%">Class : &nbsp;
+                        <select id="classid" name="classid">
+                            {% for class in classes %}
+                                <option value="{{ class.classid }}" {% if class.classid == request.form["classid"] %} selected {% endif %}>{{ class.name }}</option>
+                            {% endfor %}
+                        </select>
                     </th>
                     <th>&nbsp;</th>
                     <th class="text-right" style="width: 20%"><input class="form-control" id="SearchBox" type="text" placeholder="Search.."></th>
@@ -57,19 +63,28 @@
         </table>
         <table cellpadding="20">
         <tr>
-            <th><button type="submit"  class="btn btn-secondary"><i class="fas fa-graduation-cap"></i>&nbsp;Update Grade</button></th>
+            <td><button type="submit"  class="btn btn-secondary"><i class="fas fa-graduation-cap"></i>&nbsp;Update Grade</button></td>
+            <td><a href="http://is668grade.pythonanywhere.com/students" class="btn btn-secondary">Cancel</td></a>
         </tr>
         </table>
     </form>
 
     <script>
-    $("#GradeForm").submit(function()
-    {
-        if (!$("input[name=GradeID]:checked").val())
+        $("#GradeForm").submit(function()
         {
-            return false;
-        }
-    });
+            if ( (!$("input[name=GradeID]:checked").val()) && (!$('#formsubmit').val() == 'X'))
+            {
+                return false;
+            }
+        });
+        $( "select" ).change(function ()
+        {
+            event.preventDefault()
+            $('#formsubmit').val('X');
+            $('#GradeForm').attr('method', 'POST');
+            $('#GradeForm').attr('action', '/grade_student/');
+            $('#GradeForm').submit();
+        }).change();
     </script>
 
 {% endblock %}

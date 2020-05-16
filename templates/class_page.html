@@ -1,0 +1,65 @@
+{% extends 'base_page.html' %}
+
+{% block container %}
+    <table cellpadding="10" style="width: 100%">
+    <tr>
+        <th style="width: 10%"><a id="addID" href="/add_class/"><i class="fas fa-university"></i>&nbsp;Add</a></th>
+        <th style="width: 10%"><a id="edtID" href="#"><i class="fas fa-university"></i>&nbsp;Edit</a></th>
+        <th style="width: 10%"><a id="delID" href="#"><i class="fas fa-university"></i>&nbsp;Delete</a></th>
+        <th style="width: 30%">&nbsp;</th>
+        <th style="width: 20%">&nbsp;</th>
+        <th style="width: 20%"><input class="form-control" id="SearchBox" type="text" placeholder="Search.."></th>
+    </tr>
+    </table>
+    <form id="ClassForm" method="POST">
+        <table class="table table-hover" data-toggle="table">
+        <thead class="thead-light">
+        <tr>
+            <th>&nbsp;</th>
+            <th data-sortable="true">ID</th>
+            <th data-sortable="true">Name</th>
+            <th data-sortable="true" class="text-center">Registered Students</th>
+            <th data-sortable="true" class="text-center">Assignments Added</th>
+        </tr>
+        </thead>
+        <tbody id="DataTable">
+            {% for class in classes %}
+            <tr>
+                <td class="text-center"><input type="radio" id="{{ class.classid }}" name="classid" value="{{ class.classid }}"></td>
+                <td>{{ class.classid }}</td>
+                <td>{{ class.name }}</td>
+                <td class="text-center"><a href="/students?classid={{ class.classid }}">{{ get_student_Count(class.classid) }}</a></td>
+                <td class="text-center"><a href="/assignments?classid={{ class.classid }}">{{ get_assignment_Count(class.classid) }}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </form>
+
+    <script type="text/javascript">
+    $(document).change(function() {
+      $('#edtID').click(function() {
+        event.preventDefault()
+        $('#ClassForm').attr('method', 'POST');
+        $('#ClassForm').attr('action', '/edit_class/');
+        $('#ClassForm').submit();
+      });
+      $('#delID').click(function() {
+        if(confirm("Are you sure you want to delete the class ?\nAll Students & Assignments registered with the class will also be deleted..\nPlease Confirm"))
+        {
+            event.preventDefault()
+            $('#ClassForm').attr('method', 'POST');
+            $('#ClassForm').attr('action', '/delete_class/');
+            $('#ClassForm').submit();
+        }
+      });
+      $('.asnclass').click(function() {
+            event.preventDefault()
+            alert("121");
+            var a = $(this).data("index");
+            alert(a);
+      });
+    });
+    </script>
+
+{% endblock %}

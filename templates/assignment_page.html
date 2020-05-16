@@ -1,45 +1,51 @@
 {% extends 'base_page.html' %}
 
 {% block container %}
-    <table cellpadding="20" style="width: 100%">
+    <form id="AssignmentForm" method="POST">
+    <table cellpadding="10" style="width: 100%">
     <tr>
         <th style="width: 10%"><a id="addID" href="/add_assignment/"><i class="fas fa-book"></i>&nbsp;Add</a></th>
         <th style="width: 10%"><a id="edtID" href="#"><i class="fas fa-book"></i>&nbsp;Edit</a></th>
         <th style="width: 10%"><a id="delID" href="#"><i class="fas fa-book"></i>&nbsp;Delete</a></th>
         <th style="width: 10%"><a id="grdID" href="#"><i class="fas fa-graduation-cap"></i>&nbsp;Grades</a></th>
         <th class="text-right" style="width: 40%">
-            Class : &nbsp; <select id="classid" name="classid"><option value="IS668">IS668 - Enterprise-Wide Computing</option></select>
+            Class : &nbsp;
+                <select id="classid" name="classid">
+                    {% for class in classes %}
+                        <option value="{{ class.classid }}" {% if class.classid == classid %} selected {% endif %}>{{ class.name }}</option>
+                    {% endfor %}
+                </select>
         </th>
         <th style="width: 20%"><input class="form-control" id="SearchBox" type="text" placeholder="Search.."></th>
     </tr>
     </table>
-    <form id="AssignmentForm" method="POST">
-        <table class="table table-hover" data-toggle="table">
-        <thead class="thead-light">
+
+    <table class="table table-hover" data-toggle="table">
+    <thead class="thead-light">
+    <tr>
+        <th>&nbsp;</th>
+        <th data-sortable="true">ID</th>
+        <th data-sortable="true">Title</th>
+        <th data-sortable="true" class="text-center">Assigned Date</th>
+        <th data-sortable="true" class="text-center">Due Date</th>
+        <th data-sortable="true" class="text-right">Max Score</th>
+        <th>Comments</th>
+    </tr>
+    </thead>
+    <tbody id="DataTable">
+        {% for assignment in assignments %}
         <tr>
-            <th>&nbsp;</th>
-            <th data-sortable="true">ID</th>
-            <th data-sortable="true">Title</th>
-            <th data-sortable="true" class="text-center">Assigned Date</th>
-            <th data-sortable="true" class="text-center">Due Date</th>
-            <th data-sortable="true" class="text-right">Max Score</th>
-            <th>Comments</th>
+            <td class="text-center"><input type="radio" id="{{ assignment.assignmentid }}" name="AssignmentID" value="{{ assignment.assignmentid }}"></td>
+            <td>{{ assignment.assignmentid }}</td>
+            <td>{{ assignment.assignmenttitle }}</td>
+            <td class="text-center">{{ assignment.dateassigned.strftime('%d %b %Y') }}</td>
+            <td class="text-center">{{ assignment.duedate.strftime('%d %b %Y') }}</td>
+            <td class="text-right">{{ assignment.maxscore }}</td>
+            <td>{{ assignment.comments }}</td>
         </tr>
-        </thead>
-        <tbody id="DataTable">
-            {% for assignment in assignments %}
-            <tr>
-                <td align=center><input type="radio" id="{{ assignment.assignmentid }}" name="AssignmentID" value="{{ assignment.assignmentid }}"></td>
-                <td>{{ assignment.assignmentid }}</td>
-                <td>{{ assignment.assignmenttitle }}</td>
-                <td class="text-center">{{ assignment.dateassigned.strftime('%d %b %Y') }}</td>
-                <td class="text-center">{{ assignment.duedate.strftime('%d %b %Y') }}</td>
-                <td class="text-right">{{ assignment.maxscore }}</td>
-                <td>{{ assignment.comments }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-        </table>
+        {% endfor %}
+    </tbody>
+    </table>
     </form>
 
     <script type="text/javascript">
@@ -66,6 +72,14 @@
         $('#AssignmentForm').submit();
       });
     });
+
+    $( "select" ).change(function ()
+    {
+        event.preventDefault()
+        $('#AssignmentForm').attr('method', 'POST');
+        $('#AssignmentForm').attr('action', '/assignments');
+        $('#AssignmentForm').submit();
+    }).change();
     </script>
 
 {% endblock %}

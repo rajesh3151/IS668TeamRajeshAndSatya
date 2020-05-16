@@ -1,0 +1,37 @@
+{% extends 'base_page.html' %}
+
+{% block container %}
+    <form id="ClassForm" method="POST">
+        <input type=hidden name="StudentID" value="{{ student.studentid }}">
+        <table cellpadding="10" style="width: 100%">
+            <tr>
+                <th>Classes registered for Student :  {{ student.firstname }} {{ student.lastname }}</th>
+            </tr>
+        </table>
+
+        <table class="table table-hover" data-toggle="table">
+        <thead class="thead-light">
+        <tr>
+            <th>&nbsp;</th>
+            <th data-sortable="true">ID</th>
+            <th data-sortable="true">Name</th>
+        </tr>
+        </thead>
+        <tbody id="DataTable">
+            {% for class in classes %}
+            <tr>
+                <td class="text-center">
+                    <input type="checkbox" id="classid" name="classid" value="{{ class.classid }}"
+                    {{ get_class_assigned(request.form["StudentID"],class.classid) }}>
+                </td>
+                <td>{{ class.classid }}</td>
+                <td>{{ class.name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+        <br>
+        <button type="submit" class="btn btn-secondary">Update Classes</button>
+        <a href="http://is668grade.pythonanywhere.com/students#" class="btn btn-secondary">Cancel</button></a>
+    </form>
+{% endblock %}

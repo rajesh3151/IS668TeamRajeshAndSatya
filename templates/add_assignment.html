@@ -25,7 +25,11 @@
     </div>
     <div class="form-group">
       <label for="classid">Class</label>
-      <select id="classid" class="form-control" name="classid"><option value="IS668">IS668 - Enterprise-Wide Computing</option></select>
+        <select id="classid" class="form-control" name="classid">
+            {% for class in classes %}
+                <option value="{{ class.classid }}" {% if class.classid == request.form.get("classid") %} selected {% endif %}>{{ class.name }}</option>
+            {% endfor %}
+        </select>
     </div>
     <div class="form-group">
       <label for="assign_date">Date Assigned:</label>
@@ -52,6 +56,7 @@
       <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <button type="submit" class="btn btn-secondary">Submit</button>
+    <a href="http://is668grade.pythonanywhere.com/assignments" class="btn btn-secondary">Cancel</a>
   </form>
 </div>
 {% endblock %}
