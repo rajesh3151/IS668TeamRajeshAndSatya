@@ -12,10 +12,10 @@
             <th class="text-right" style="width: 25%">
                 Class : &nbsp;
                     <select id="classid" name="classid">
+                        <option value="-" {% if classid == '-' %} selected {% endif %}>-- All Students --</option>
                         {% for class in classes %}
                             <option value="{{ class.classid }}" {% if class.classid == classid %} selected {% endif %}>{{ class.name }}</option>
                         {% endfor %}
-                        <option value="-" {% if classid == '-' %} selected {% endif %}>-- All Students --</option>
                     </select>
             </th>
             <th style="width: 20%"><input class="form-control" id="SearchBox" type="text" placeholder="Search.."></th>
@@ -47,6 +47,9 @@
                 </tr>
             {% endfor %}
         </tbody>
+        </table>
+        <table class="table">
+            <tr><th class="text-center">** Grades are displayed after selecting the class</th></tr>
         </table>
     </form>
 

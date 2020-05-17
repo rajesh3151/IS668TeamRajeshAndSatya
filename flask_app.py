@@ -137,7 +137,9 @@ def get_final_grade(studentID,classID):
                 totalscore = totalscore + gradebook.assignmentgrade
     if totalmaxscore > 0:
         finalscore = ( totalscore * 100 ) / totalmaxscore
-    return get_final_score(finalscore)
+        return get_final_score(finalscore)
+    else:
+        return ''
 
 def get_student_Count(classid):
     return ClassStudents.query.filter_by(classid=classid).count()
@@ -218,6 +220,8 @@ def edit_class():
 
 @app.route('/delete_class/', methods=["POST"])
 def delete_class():
+	ClassStudents.query.filter_by(classid=request.form["classid"] ).delete()
+	Assignment.query.filter_by(classid=request.form["classid"] ).delete()
 	Class.query.filter_by(classid=request.form["classid"] ).delete()
 	db.session.commit()
 	return redirect (url_for('classes'))
@@ -228,6 +232,7 @@ def assign_classes():
 
     selectedClasses = request.form.getlist('classid')
     checked = 0
+    updated = 0
     for i in range(len(selectedClasses)):
         if selectedClasses[i] != '-':
             checked = checked + 1
@@ -242,10 +247,11 @@ def assign_classes():
                 )
                 db.session.add(ClassStudent)
                 db.session.commit()
+                updated = updated + 1
 
     classes = Class.query.all()
     student = Student.query.filter_by(studentid=request.form["StudentID"] ).first()
-    return render_template('assign_classes.html', classes=classes,student=student,get_class_assigned=get_class_assigned)
+    return render_template('assign_classes.html', classes=classes,student=student,get_class_assigned=get_class_assigned,updated=updated)
 
 ###############################################################################
 ### STUDENTS
@@ -268,12 +274,13 @@ def students():
         else:
             students = Student.query.all()
     else:
-        classid = classes[0].classid
-        #students = Student.query.filter_by(classid=classid).all()
-        students = Student.query\
-            .join(ClassStudents, Student.studentid==ClassStudents.studentid)\
-            .add_columns(Student.studentid, Student.firstname,Student.lastname,Student.email,Student.major)\
-            .filter(ClassStudents.classid == classid)
+        classid = '-'
+        students = Student.query.all()
+        #classid = classes[0].classid
+        #students = Student.query\
+        #    .join(ClassStudents, Student.studentid==ClassStudents.studentid)\
+        #    .add_columns(Student.studentid, Student.firstname,Student.lastname,Student.email,Student.major)\
+        #    .filter(ClassStudents.classid == classid)
 
     return render_template('student_page.html', students=students, classes=classes,classid=classid,get_final_grade=get_final_grade )
 
@@ -385,7 +392,6 @@ def delete_assignment():
 @app.route('/grade_student/', methods=["GET","POST"])
 @login_required
 def grade_student():
-    #classes  = Class.query.all()
     classes = Class.query\
                 .join(ClassStudents, Class.classid==ClassStudents.classid)\
                 .add_columns(Class.classid, Class.name)\
@@ -393,17 +399,26 @@ def grade_student():
 
     student     = Student.query.filter_by(studentid=request.form["StudentID"]).first()
     gradebooks  = Gradebook.query.filter_by(studentid=request.form["StudentID"]).all()
-    assignments = Assignment.query.filter_by(classid=request.form["classid"]).all()
+
+    classid = request.form["classid"]
+    if classid != '-':
+        assignments = Assignment.query.filter_by(classid=classid).all()
+    else:
+        if classes.count() > 0:
+            classid = classes[0].classid
+        else:
+            classid = '-'
+        assignments = Assignment.query.filter_by(classid=classid).all()
 
     finalscore = 0
     for assignment in assignments:
         for gradebook in gradebooks:
             if gradebook.assignmentid == assignment.assignmentid:
                 finalscore = finalscore + gradebook.assignmentgrade
-    finalGrade = get_final_grade(request.form["StudentID"],request.form["classid"])
+    finalGrade = get_final_grade(request.form["StudentID"],classid)
     return render_template('student_gradebook.html', student=student, assignments=assignments, \
                             gradebooks=gradebooks,finalscore=finalscore,finalGrade=finalGrade, \
-                            classes=classes)
+                            classes=classes,classid=classid)
 
 @app.route('/grade_assignment/', methods=["GET","POST"])
 @login_required

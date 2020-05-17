@@ -34,4 +34,19 @@
         <button type="submit" class="btn btn-secondary">Update Classes</button>
         <a href="http://is668grade.pythonanywhere.com/students#" class="btn btn-secondary">Cancel</button></a>
     </form>
+    <BR>
+    {% if updated > 0 %}
+        <div class="alert bg-light text-dark" role="alert" id="success-alert">
+            <p class="text-center"><strong>Classes assigned to student {{ student.firstname }} {{ student.lastname }} successfully</strong></p>
+        </div>
+        <script type="text/javascript">
+        	$(document).ready(function()
+        	{
+        		$("#success-alert").fadeTo(2000, 500).slideUp(500, function()
+        		{
+        			$("#success-alert").slideUp(500);
+        		});
+        	});
+        </script>
+    {% endif %}
 {% endblock %}

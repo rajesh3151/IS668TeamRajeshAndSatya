@@ -5,7 +5,7 @@
     <form name="GradeForm" id="GradeForm" method="POST" action="/update_grades/">
         <input type=hidden name="GradeBook" value='STUDENTS'>
         <input type=hidden name="StudentID" value='{{ student.studentid }}'>
-        <input type=hidden name="formsubmit">
+        <input type=hidden id="formsubmit" name="formsubmit">
 
         <div class="border-bottom row">
             <table style="width: 100%">
@@ -15,7 +15,7 @@
                     <th style="width: 25%">Class : &nbsp;
                         <select id="classid" name="classid">
                             {% for class in classes %}
-                                <option value="{{ class.classid }}" {% if class.classid == request.form["classid"] %} selected {% endif %}>{{ class.name }}</option>
+                                <option value="{{ class.classid }}" {% if class.classid == classid %} selected {% endif %}>{{ class.name }}</option>
                             {% endfor %}
                         </select>
                     </th>
@@ -23,7 +23,14 @@
                     <th class="text-right" style="width: 20%"><input class="form-control" id="SearchBox" type="text" placeholder="Search.."></th>
                 </tr>
                 <tr><th>E-Mail Address</th><th>:</th><th>{{ student.email }}</th><th>Major</th><th>:</th><th>{{ student.major }}</th></tr>
-                <tr><th>Total Score</th><th>:</th><th>{{ finalscore }} / {{ assignments | sum(attribute='maxscore') }}</th><th>Grade</th><th>:</th><th>{{ finalGrade }}</th></tr>
+                <tr><th>Total Score</th><th>:</th><th>{{ finalscore }} / {{ assignments | sum(attribute='maxscore') }}</th>
+                    {% if finalGrade != '' %}
+                        <th>Grade</th><th>:</th><th>{{ finalGrade }}</th>
+                    {% else %}
+                        <th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th>
+                    {% endif %}
+
+                </tr>
             </table>
         </div>
         <br>
@@ -72,10 +79,17 @@
     <script>
         $("#GradeForm").submit(function()
         {
-            if ( (!$("input[name=GradeID]:checked").val()) && (!$('#formsubmit').val() == 'X'))
+            gradeIDValue    = $("input[name=GradeID]:checked").val()
+            formSubmitValue = $('#formsubmit').val()
+            if (!(typeof gradeIDValue === "undefined"))
+                return true;
+            else if(formSubmitValue == "X")
             {
-                return false;
+                $('#formsubmit').val('');
+                return true;
             }
+            else
+                return false;
         });
         $( "select" ).change(function ()
         {
